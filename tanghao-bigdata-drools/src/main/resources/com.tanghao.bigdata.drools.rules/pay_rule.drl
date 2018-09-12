@@ -1,0 +1,33 @@
+import com.tanghao.bigdata.drools.domain.PayRequest;
+import com.tanghao.bigdata.drools.domain.RuleResponse;
+import com.tanghao.bigdata.drools.enums.EnumRuleResponseLevel
+
+rule "pay_rule"
+no-loop true
+	when
+        $pay : PayRequest(RuleResponse.checkIsNull(response) && amount > 35);
+    then
+        $pay.setResponse("9999",EnumRuleResponseLevel.ERROR.getCode(),"金额单笔金额超35了");
+		update($pay);
+        System.out.println("hello, 支付金额超35啦");
+end
+
+rule "pay_rule2"
+no-loop true
+	when
+        $pay : PayRequest(RuleResponse.checkIsNull(response) && amount > 33);
+    then
+        $pay.setResponse("9999",EnumRuleResponseLevel.ERROR.getCode(),"金额单笔金额超33了");
+		update($pay);
+        System.out.println("hello, 支付金额超33啦");
+end
+
+rule "pay_rule3"
+no-loop true
+	when
+        $pay : PayRequest(RuleResponse.checkIsNull(response) && amount > 31);
+    then
+        $pay.setResponse("9999",EnumRuleResponseLevel.ERROR.getCode(),"金额单笔金额超31了");
+		update($pay);
+        System.out.println("hello, 支付金额超31啦");
+end
