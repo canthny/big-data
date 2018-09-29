@@ -37,4 +37,16 @@ public enum EnumRuleResponseLevel {
         this.code = code;
         this.desc = desc;
     }
+
+    public static String getDescByCode(String code){
+        if (code == null) {
+            return null;
+        }
+        for (EnumRuleResponseLevel level : values()) {
+            if (level.getCode().equals(code)) {
+                return level.getDesc();
+            }
+        }
+        return null;
+    }
 }

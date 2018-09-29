@@ -1,7 +1,9 @@
 package com.tanghao.bigdata.drools.controller;
 
-import com.tanghao.bigdata.drools.domain.PayRequest;
-import com.tanghao.bigdata.drools.domain.RuleResponse;
+import com.tanghao.bigdata.drools.domain.request.BaseRequest;
+import com.tanghao.bigdata.drools.domain.request.MobilePaymentRequest;
+import com.tanghao.bigdata.drools.domain.response.RuleResponse;
+import com.tanghao.bigdata.drools.util.DateUtil;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -24,10 +26,12 @@ public class TestPayRule {
     public RuleResponse testPayRule(){
         KieContainer kc = KieServices.Factory.get().getKieClasspathContainer();
         KieSession ksession = kc.newKieSession("pay_rule");
-        PayRequest payRequest = new PayRequest();
+        MobilePaymentRequest payRequest = new MobilePaymentRequest();
         payRequest.setAccountNo("1");
-        payRequest.setAmount(34L);
-        payRequest.setPayTime(new Date());
+        payRequest.setAmount(51);
+        payRequest.setOutTradeDate(DateUtil.convertDateToString("yyyyMMdd",new Date()));
+        payRequest.setMobile("18709858763");
+        payRequest.setBankCardNo("62260113241234");
         ksession.insert(payRequest);
         ksession.fireAllRules();
         ksession.dispose();

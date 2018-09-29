@@ -1,5 +1,7 @@
-package com.tanghao.bigdata.drools.mongodb.domain;
+package com.tanghao.bigdata.drools.domain;
 
+import com.alibaba.fastjson.JSONObject;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
@@ -10,6 +12,7 @@ import java.util.Date;
  * @Description： 手机缴费信息对象
  * @Date： Created in 2018/9/27 14:35
  */
+@Document(collection="MOBILE_PAYMENT_INFO")
 public class MobilePaymentInfo implements Serializable{
     private static final long serialVersionUID = -4612172600889702761L;
 
@@ -89,5 +92,18 @@ public class MobilePaymentInfo implements Serializable{
                 ", amount='" + amount + '\'' +
                 ", time='" + time + '\'' +
                 '}';
+    }
+
+    public static void main(String[] args) {
+        MobilePaymentInfo info = new MobilePaymentInfo();
+        info.setAccountNo("1234312412345235");
+        info.setAmount(120);
+        info.setBankCardNo("62260113241234");
+        info.setMobile("18709858763");
+        info.setPayOrderNo("2018092700002");
+        info.setTime(new Date());
+
+        String demo = JSONObject.toJSONString(info);
+        System.out.println(demo);
     }
 }

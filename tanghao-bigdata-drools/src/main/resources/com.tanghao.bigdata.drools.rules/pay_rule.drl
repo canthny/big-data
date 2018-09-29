@@ -1,33 +1,32 @@
-import com.tanghao.bigdata.drools.domain.PayRequest;
-import com.tanghao.bigdata.drools.domain.RuleResponse;
-import com.tanghao.bigdata.drools.enums.EnumRuleResponseLevel
+import com.tanghao.bigdata.drools.domain.request.MobilePaymentRequest;
+import com.tanghao.bigdata.drools.domain.response.RuleResponse;
+import com.tanghao.bigdata.drools.enums.EnumRuleResponseLevel;
+import com.tanghao.bigdata.drools.service.PhoneNoBlacklistService;
 
 rule "pay_rule"
 no-loop true
 	when
-        $pay : PayRequest(RuleResponse.checkIsNull(response) && amount > 35);
+        $pay : MobilePaymentRequest(RuleResponse.checkIsNull(response) && amount > 50);
     then
-        $pay.setResponse("9999",EnumRuleResponseLevel.ERROR.getCode(),"金额单笔金额超35了");
+        $pay.setResponse("9999",EnumRuleResponseLevel.LOW.getCode(),"金额单笔金额超50了");
 		update($pay);
-        System.out.println("hello, 支付金额超35啦");
 end
 
 rule "pay_rule2"
 no-loop true
 	when
-        $pay : PayRequest(RuleResponse.checkIsNull(response) && amount > 33);
+        $pay : MobilePaymentRequest(RuleResponse.checkIsNull(response) && PhoneNoBlacklistService.isBlack(mobile));
     then
-        $pay.setResponse("9999",EnumRuleResponseLevel.ERROR.getCode(),"金额单笔金额超33了");
+        $pay.setResponse("9999",EnumRuleResponseLevel.LOW.getCode(),"手机号在黑名单中");
 		update($pay);
-        System.out.println("hello, 支付金额超33啦");
 end
 
 rule "pay_rule3"
 no-loop true
 	when
-        $pay : PayRequest(RuleResponse.checkIsNull(response) && amount > 31);
+        $pay : MobilePaymentRequest(RuleResponse.checkIsNull(response) && amount > 31);
     then
-        $pay.setResponse("9999",EnumRuleResponseLevel.ERROR.getCode(),"金额单笔金额超31了");
+        $pay.setResponse("9999",EnumRuleResponseLevel.LOW.getCode(),"金额单笔金额超31了");
 		update($pay);
         System.out.println("hello, 支付金额超31啦");
 end

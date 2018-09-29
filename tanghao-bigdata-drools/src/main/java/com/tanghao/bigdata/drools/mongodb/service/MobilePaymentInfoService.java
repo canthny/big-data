@@ -1,6 +1,6 @@
 package com.tanghao.bigdata.drools.mongodb.service;
 
-import com.tanghao.bigdata.drools.mongodb.domain.MobilePaymentInfo;
+import com.tanghao.bigdata.drools.domain.MobilePaymentInfo;
 
 /**
  * @Author： Canthny

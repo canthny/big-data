@@ -1,6 +1,6 @@
 package com.tanghao.bigdata.drools.mongodb.service.impl;
 
-import com.tanghao.bigdata.drools.mongodb.domain.MobilePaymentInfo;
+import com.tanghao.bigdata.drools.domain.MobilePaymentInfo;
 import com.tanghao.bigdata.drools.mongodb.service.MobilePaymentInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
