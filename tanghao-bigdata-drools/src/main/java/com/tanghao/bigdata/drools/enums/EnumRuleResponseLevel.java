@@ -7,9 +7,11 @@ package com.tanghao.bigdata.drools.enums;
  */
 public enum EnumRuleResponseLevel {
 
-    ERROR("2","阻断型"),
-    WARN("1","提示型"),
-    INFO("0","监控型");
+    NONE("0","无风险"),
+    LOW("1","低风险"),
+    MIDDLE("2","中风险"),
+    HIGH("3","高风险"),
+    SUPER("4","超高风险");
 
     private String code;
 
