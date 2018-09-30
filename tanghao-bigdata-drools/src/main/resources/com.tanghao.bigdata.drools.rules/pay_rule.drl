@@ -2,13 +2,14 @@ import com.tanghao.bigdata.drools.domain.request.MobilePaymentRequest;
 import com.tanghao.bigdata.drools.domain.response.RuleResponse;
 import com.tanghao.bigdata.drools.enums.EnumRuleResponseLevel;
 import com.tanghao.bigdata.drools.service.PhoneNoBlacklistService;
+import com.tanghao.bigdata.drools.service.MobilePaymentRuleService;
 
 rule "pay_rule"
 no-loop true
 	when
-        $pay : MobilePaymentRequest(RuleResponse.checkIsNull(response) && amount > 50);
+        $pay : MobilePaymentRequest(RuleResponse.checkIsNull(response) && amount > 300);
     then
-        $pay.setResponse("9999",EnumRuleResponseLevel.LOW.getCode(),"金额单笔金额超50了");
+        $pay.setResponse("9999",EnumRuleResponseLevel.LOW.getCode(),"金额单笔金额超300了");
 		update($pay);
 end
 
@@ -24,9 +25,17 @@ end
 rule "pay_rule3"
 no-loop true
 	when
-        $pay : MobilePaymentRequest(RuleResponse.checkIsNull(response) && amount > 31);
+        $pay : MobilePaymentRequest(RuleResponse.checkIsNull(response) && amount > 3*MobilePaymentRuleService.getAvgAmountPerMonthByAccountNo(accountNo));
     then
-        $pay.setResponse("9999",EnumRuleResponseLevel.LOW.getCode(),"金额单笔金额超31了");
+        $pay.setResponse("9999",EnumRuleResponseLevel.MIDDLE.getCode(),"大于上月平均充值金额的3倍");
 		update($pay);
-        System.out.println("hello, 支付金额超31啦");
+end
+
+rule "pay_rule4"
+no-loop true
+	when
+        $pay : MobilePaymentRequest(RuleResponse.checkIsNull(response) && 10 >= MobilePaymentRuleService.getCountPerHourByAccountNo(accountNo));
+    then
+        $pay.setResponse("9999",EnumRuleResponseLevel.HIGH.getCode(),"1小时内最多充值10次！");
+		update($pay);
 end

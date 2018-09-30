@@ -6,6 +6,9 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.util.Assert;
+
+import java.nio.charset.Charset;
 
 /**
  * @Author： Canthny
@@ -30,9 +33,31 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(stringSerializer);
         redisTemplate.setValueSerializer(stringSerializer);
         redisTemplate.setHashKeySerializer(stringSerializer);
-        redisTemplate.setHashValueSerializer(stringSerializer);
+        redisTemplate.setHashValueSerializer(new IntegerRedisSerializer());
         redisTemplate.setConnectionFactory(factory);
         return redisTemplate;
+    }
+
+    public class IntegerRedisSerializer implements RedisSerializer<Integer> {
+
+        private final Charset charset;
+
+        public IntegerRedisSerializer() {
+            this(Charset.forName("UTF8"));
+        }
+
+        public IntegerRedisSerializer(Charset charset) {
+            Assert.notNull(charset, "Charset must not be null!");
+            this.charset = charset;
+        }
+
+        public Integer deserialize(byte[] bytes) {
+            return (bytes == null ? null : Integer.parseInt(new String(bytes, charset)));
+        }
+
+        public byte[] serialize(Integer num) {
+            return (num == null ? null : String.valueOf(num).getBytes(charset));
+        }
     }
 
 }

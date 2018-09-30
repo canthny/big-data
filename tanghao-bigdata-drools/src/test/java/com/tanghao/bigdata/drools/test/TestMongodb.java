@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.QueryBuilder;
 import com.tanghao.bigdata.drools.DroolsStarter;
+import com.tanghao.bigdata.drools.domain.DefeatMapReduceObject;
 import com.tanghao.bigdata.drools.domain.MobilePaymentInfo;
 import com.tanghao.bigdata.drools.domain.PhoneNoBlackObject;
 import com.tanghao.bigdata.drools.mongodb.service.MobilePaymentInfoService;
@@ -19,6 +20,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -37,14 +40,16 @@ public class TestMongodb {
     MongoOperations mongoTemplate;
 
     @Test
-    public void testSave() {
+    public void testSave() throws ParseException {
         MobilePaymentInfo info = new MobilePaymentInfo();
         info.setAccountNo("3691529391467418");
         info.setAmount((int)(Math.random()*100));
         info.setBankCardNo("62260113241234");
         info.setMobile("18709858763");
         info.setPayOrderNo("2018090300001");
-        info.setTime(new Date());
+        SimpleDateFormat format =  new SimpleDateFormat( "yyyy-MM-dd" );
+        info.setTime(format.parse("2018-09-26"));
+//        info.setTime(new Date());
 
         mobilePaymentInfoService.saveMobilePaymentInfo(info);
     }
@@ -65,7 +70,6 @@ public class TestMongodb {
      */
     @Test
     public void findPhonenNoBlackList(){
-
         BasicDBObject fieldsObject=new BasicDBObject();//指定返回的字段fieldsObject.put("name", true);
         fieldsObject.put("phone_no", true);
         Query query = new BasicQuery(new BasicDBObject(),fieldsObject);
@@ -74,14 +78,15 @@ public class TestMongodb {
         for(PhoneNoBlackObject info:list){
             phoneNoBlackListSet.add(info.getPhoneNo());
         }
-        String test = "1";
+        System.out.println(phoneNoBlackListSet.toArray());
     }
 
     @Test
-    public void testMapReduce(){
+    public void testMapReduce() throws ParseException {
         Query query = new Query();
-//        Criteria criteria = Criteria.where("time").gte("2018-09-27").lte("2018-09-30");
-//        query.addCriteria(criteria);
+        SimpleDateFormat format =  new SimpleDateFormat( "yyyy-MM-dd" );
+        Criteria criteria = Criteria.where("time").gte(format.parse("2018-09-27")).lte(format.parse("2018-09-30"));
+        query.addCriteria(criteria);
         MapReduceOptions mapReduceOptions = new MapReduceOptions();
         mapReduceOptions.outputCollection("ACCOUNT_MOBILEPAYMENT_DAY_AVG");
         mongoTemplate.mapReduce(query, "MOBILE_PAYMENT_INFO","classpath:mapreduce/mobile_payment_info_map.js", "classpath:mapreduce/mobile_payment_info_reduce.js",
