@@ -81,6 +81,10 @@ public class TestMongodb {
         System.out.println(phoneNoBlackListSet.toArray());
     }
 
+    /**
+     * mongodb mapreduce批处理任务，可以通过定时器去执行，也可以通过crontab定时任务方式去执行脚本
+     * @throws ParseException
+     */
     @Test
     public void testMapReduce() throws ParseException {
         Query query = new Query();
