@@ -9,6 +9,7 @@ import com.tanghao.bigdata.drools.domain.MobilePaymentInfo;
 import com.tanghao.bigdata.drools.domain.PhoneNoBlackObject;
 import com.tanghao.bigdata.drools.mongodb.service.MobilePaymentInfoService;
 import com.tanghao.bigdata.drools.service.PhoneNoBlacklistService;
+import com.tanghao.bigdata.drools.util.DateUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,21 +40,35 @@ public class TestMongodb {
     @Autowired
     MongoOperations mongoTemplate;
 
+    /**
+     * 缴费数据插入
+     * @throws ParseException
+     */
     @Test
     public void testSave() throws ParseException {
-        MobilePaymentInfo info = new MobilePaymentInfo();
-        info.setAccountNo("3691529391467418");
-        info.setAmount((int)(Math.random()*100));
-        info.setBankCardNo("62260113241234");
-        info.setMobile("18709858763");
-        info.setPayOrderNo("2018090300001");
-        SimpleDateFormat format =  new SimpleDateFormat( "yyyy-MM-dd" );
-        info.setTime(format.parse("2018-09-26"));
-//        info.setTime(new Date());
-
-        mobilePaymentInfoService.saveMobilePaymentInfo(info);
+        for(int i=0;i<10;i++){
+            MobilePaymentInfo info = new MobilePaymentInfo();
+            info.setAccountNo("3691529391467418");
+            info.setAmount((int)(Math.random()*100));
+            info.setBankCardNo("62260113241234");
+            info.setMobile("18709858763");
+            info.setPayOrderNo("2018090300001");
+//          SimpleDateFormat format =  new SimpleDateFormat( "yyyy-MM-dd" );
+//          info.setTime(format.parse("2018-09-26"));
+            if(i%3==0){
+                info.setTime(DateUtil.getRelativeDate(new Date(),-1));
+            }else if(i%3==1){
+                info.setTime(new Date());
+            }else if(i%3==2){
+                info.setTime(DateUtil.getRelativeDate(new Date(),1));
+            }
+            mobilePaymentInfoService.saveMobilePaymentInfo(info);
+        }
     }
 
+    /**
+     * 插入黑名单数据
+     */
     @Test
     public void insertPhoneNoBlackList(){
         String phoneNo = "18709858763";
@@ -66,7 +81,24 @@ public class TestMongodb {
     }
 
     /**
-     * 查询，指定查询条件和查询结果字段
+     * mongodb mapreduce批处理任务，可以通过定时器去执行，也可以通过crontab定时任务方式去执行脚本
+     * 计算三天内用户缴费平均值
+     * @throws ParseException
+     */
+    @Test
+    public void testMapReduce() throws ParseException {
+        Query query = new Query();
+        SimpleDateFormat format =  new SimpleDateFormat( "yyyy-MM-dd" );
+        Criteria criteria = Criteria.where("time").gte(DateUtil.getRelativeDate(new Date(),-1)).lte(DateUtil.getRelativeDate(new Date(),1));
+        query.addCriteria(criteria);
+        MapReduceOptions mapReduceOptions = new MapReduceOptions();
+        mapReduceOptions.outputCollection("ACCOUNT_MOBILEPAYMENT_DAY_AVG");
+        mongoTemplate.mapReduce(query, "MOBILE_PAYMENT_INFO","classpath:mapreduce/mobile_payment_info_map.js", "classpath:mapreduce/mobile_payment_info_reduce.js",
+                mapReduceOptions, HashMap.class);
+    }
+
+    /**
+     * mongodb查询，指定查询条件和查询结果字段
      */
     @Test
     public void findPhonenNoBlackList(){
@@ -79,26 +111,5 @@ public class TestMongodb {
             phoneNoBlackListSet.add(info.getPhoneNo());
         }
         System.out.println(phoneNoBlackListSet.toArray());
-    }
-
-    /**
-     * mongodb mapreduce批处理任务，可以通过定时器去执行，也可以通过crontab定时任务方式去执行脚本
-     * @throws ParseException
-     */
-    @Test
-    public void testMapReduce() throws ParseException {
-        Query query = new Query();
-        SimpleDateFormat format =  new SimpleDateFormat( "yyyy-MM-dd" );
-        Criteria criteria = Criteria.where("time").gte(format.parse("2018-09-27")).lte(format.parse("2018-09-30"));
-        query.addCriteria(criteria);
-        MapReduceOptions mapReduceOptions = new MapReduceOptions();
-        mapReduceOptions.outputCollection("ACCOUNT_MOBILEPAYMENT_DAY_AVG");
-        mongoTemplate.mapReduce(query, "MOBILE_PAYMENT_INFO","classpath:mapreduce/mobile_payment_info_map.js", "classpath:mapreduce/mobile_payment_info_reduce.js",
-                mapReduceOptions, HashMap.class);
-    }
-
-    @Test
-    public void test(){
-        System.out.println(PhoneNoBlacklistService.isBlack("18709858763"));
     }
 }

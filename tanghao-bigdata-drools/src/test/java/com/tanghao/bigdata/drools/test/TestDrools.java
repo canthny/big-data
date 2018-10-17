@@ -23,9 +23,7 @@ import java.util.Date;
 public class TestDrools {
 
     /**
-     * 用户首次充值后3个月内额度控制在单笔50元（每天定时批处理新增充值用户，插入中间表-用户首次充值时间表）
-     本次充值的手机号不在用户历史充值手机号列表中（实时就要更新返回给缓存）
-     用户一个月内最多为10个手机充值（实时直接查询count）
+     *测试case1：金额超限
      */
     @Test
     public void testCase1(){
@@ -33,7 +31,7 @@ public class TestDrools {
         KieSession ksession = kc.newKieSession("pay_rule");
         MobilePaymentRequest payRequest = new MobilePaymentRequest();
         payRequest.setAccountNo("3691529391467418");
-        payRequest.setAmount(51);//设置为大于单笔的最大限额
+        payRequest.setAmount(351);//设置为大于单笔的最大限额，pay_rule.drl中规则pay_rule1配的是300
         payRequest.setOutTradeDate(DateUtil.convertDateToString("yyyyMMdd",new Date()));
         payRequest.setMobile("18709858763");
         payRequest.setBankCardNo("62260113241234");
@@ -53,7 +51,7 @@ public class TestDrools {
         KieSession ksession = kc.newKieSession("pay_rule");
         MobilePaymentRequest payRequest = new MobilePaymentRequest();
         payRequest.setAccountNo("3691529391467418");
-        payRequest.setAmount(49);
+        payRequest.setAmount(49);//金额不要超过单笔限额
         payRequest.setOutTradeDate(DateUtil.convertDateToString("yyyyMMdd",new Date()));
         payRequest.setMobile("18709858763");//手机号在黑名单中
         payRequest.setBankCardNo("62260113241234");
