@@ -1,9 +1,9 @@
-#drool规则引擎测试-手机缴费风险控制Demo
-##1-单笔金额超限；
-##2-手机号在黑名单中；
-##3-充值金额不能大于近3天平均值的3倍
+#   drool规则引擎测试-手机缴费风险控制Demo
+##  1-单笔金额超限；
+##  2-手机号在黑名单中；
+##  3-充值金额不能大于近3天平均值的3倍
 
-#启动服务
+#   启动服务
 //mongodb启动命令中的ip跟着本机的动态ip改变
 cd /usr/local/mongodb/bin
 nohup ./mongod -bind_ip 192.168.0.102 &
@@ -16,7 +16,7 @@ nohup bin/kafka-server-start.sh config/server.properties &
 //tanghao-bigdata-drools工程中配置mongodb和redis的ip为本地或虚拟机的ip
 //tanghao-flink-demo工程中配置kafka的地址
 #	数据准备
-##1、	插入3天缴费数据十条，金额随机，执行TestMongodb中的testSave()方法插入数据
+##  1、插入3天缴费数据十条，金额随机，执行TestMongodb中的testSave()方法插入数据
 cd /usr/local/mongodb/bin
 ./mongo 192.168.0.102:27017/rule进入命令行查询数据
  
@@ -35,13 +35,13 @@ db.mobilePaymentInfo.insert({"_class" : "com.tanghao.bigdata.drools.mongodb.doma
 db.mobilePaymentInfo.remove({})
 //根据日期查询
 db.mobilePaymentInfo.find({time:{'$gte':ISODate("2018-09-27"),'$lt':ISODate("2018-09-28")}})
-##2、插入手机号黑名单数据，执行TestMongodb中的insertPhoneNoBlackList()方法
+##  2、插入手机号黑名单数据，执行TestMongodb中的insertPhoneNoBlackList()方法
  
-##3、计算3天内用户缴费平均金额，执行TestMongodb中的testMapReduce()方法，并将计算结果插入新表用户3日缴费平均金额中
+##  3、计算3天内用户缴费平均金额，执行TestMongodb中的testMapReduce()方法，并将计算结果插入新表用户3日缴费平均金额中
  _id即为用户的account_no，value为3日缴费平均金额	
 
 
-#单元测试
+#   单元测试
 测试准备
 	规则引擎测试：tanghao-bigdata-drools工程TestDrools单元测试中的testCase1\2\3\4方法
 	规则执行顺序(pay_rule.drl文件中的salience属性)：单笔限额>手机号黑名单>充值平均值
