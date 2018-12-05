@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kmodule xmlns="http://www.drools.org/xsd/kmodule">
-    <kbase name="rules" packages="com.tanghao.bigdata.drools.rules">
-        <ksession name="pay_rule"/>
-    </kbase>
+    <!--<kbase name="rules" packages="com.tanghao.bigdata.drools.rules">-->
+        <!--<ksession name="pay_rule"/>-->
+    <!--</kbase>-->
 </kmodule>

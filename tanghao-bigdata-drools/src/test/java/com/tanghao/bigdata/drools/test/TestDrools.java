@@ -6,8 +6,15 @@ import com.tanghao.bigdata.drools.util.DateUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.api.KieServices;
+import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.KnowledgeBase;
+import org.kie.internal.KnowledgeBaseFactory;
+import org.kie.internal.builder.KnowledgeBuilder;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
+import org.kie.internal.io.ResourceFactory;
+import org.kie.internal.runtime.StatefulKnowledgeSession;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -27,18 +34,36 @@ public class TestDrools {
      */
     @Test
     public void testCase1(){
-        KieContainer kc = KieServices.Factory.get().getKieClasspathContainer();
-        KieSession ksession = kc.newKieSession("pay_rule");
+
+        KnowledgeBuilder knowledgeBuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+        knowledgeBuilder.add(ResourceFactory.newClassPathResource("drools/pay_rule.drl"), ResourceType.DRL);
+        knowledgeBuilder.add(ResourceFactory.newClassPathResource("drools/pay_rule2.drl"), ResourceType.DRL);
+        KnowledgeBase knowledgeBase = KnowledgeBaseFactory.newKnowledgeBase();
+        knowledgeBase.addKnowledgePackages(knowledgeBuilder.getKnowledgePackages());
+        StatefulKnowledgeSession knowledgeSession = knowledgeBase.newStatefulKnowledgeSession();
         MobilePaymentRequest payRequest = new MobilePaymentRequest();
         payRequest.setAccountNo("3691529391467418");
         payRequest.setAmount(351);//设置为大于单笔的最大限额，pay_rule.drl中规则pay_rule1配的是300
         payRequest.setOutTradeDate(DateUtil.convertDateToString("yyyyMMdd",new Date()));
         payRequest.setMobile("18709858763");
         payRequest.setBankCardNo("62260113241234");
-        ksession.insert(payRequest);
-        ksession.fireAllRules();
-        ksession.dispose();
+        knowledgeSession.insert(payRequest);//具体的java类对象添加到workingMemory中。
+        knowledgeSession.fireAllRules();
+        knowledgeSession.dispose();
         System.out.println(payRequest.getResponse());
+
+//        KieContainer kc = KieServices.Factory.get().getKieClasspathContainer();
+//        KieSession ksession = kc.newKieSession("pay_rule");
+//        MobilePaymentRequest payRequest = new MobilePaymentRequest();
+//        payRequest.setAccountNo("3691529391467418");
+//        payRequest.setAmount(351);//设置为大于单笔的最大限额，pay_rule.drl中规则pay_rule1配的是300
+//        payRequest.setOutTradeDate(DateUtil.convertDateToString("yyyyMMdd",new Date()));
+//        payRequest.setMobile("18709858763");
+//        payRequest.setBankCardNo("62260113241234");
+//        ksession.insert(payRequest);
+//        ksession.fireAllRules();
+//        ksession.dispose();
+//        System.out.println(payRequest.getResponse());
     }
 
     /**

@@ -9,7 +9,7 @@ public enum EnumRuleResponseLevel {
 
     NONE("0","无风险"),
     LOW("1","低风险"),
-    MIDDLE("2","中风险"),
+    MIDDLE("2","中风险 "),
     HIGH("3","高风险"),
     SUPER("4","超高风险");
 

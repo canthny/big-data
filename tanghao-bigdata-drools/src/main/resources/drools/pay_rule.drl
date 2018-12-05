@@ -1,0 +1,21 @@
+import com.tanghao.bigdata.drools.domain.request.MobilePaymentRequest;
+import com.tanghao.bigdata.drools.domain.response.RuleResponse;
+import com.tanghao.bigdata.drools.enums.EnumRuleResponseLevel;
+import com.tanghao.bigdata.drools.service.PhoneNoBlacklistService;
+import com.tanghao.bigdata.drools.service.MobilePaymentRuleService;
+import com.tanghao.bigdata.drools.util.DateUtil;
+
+rule "pay_rule1"
+//执行顺序配置，数字越大优先级越高
+salience 4
+//对于自己规则操作引起的update重新匹配，不会重复执行，对于其他规则操作引起的update重新匹配会执行一次
+//当两个规则都满足，并且then中都会update的情况下就会进入死循环这时要使用lock-on-active属性保证规则只会执行一次
+//这里通过塞入响应对象以及前置空判断保证规则不会同时满足，只会执行一次
+no-loop true
+	when
+        $pay : MobilePaymentRequest(RuleResponse.checkIsNull(response) && amount > 300);
+    then
+        $pay.setResponse("9999",EnumRuleResponseLevel.LOW.getCode(),"金额单笔金额超300了");
+        System.out.println("金额单笔金额超300了");
+		update($pay);
+end

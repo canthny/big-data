@@ -2,6 +2,7 @@ package com.tanghao.bigdata.drools;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @Author： Canthny

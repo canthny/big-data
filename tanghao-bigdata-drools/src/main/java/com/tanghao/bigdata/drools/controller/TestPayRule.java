@@ -1,6 +1,5 @@
 package com.tanghao.bigdata.drools.controller;
 
-import com.tanghao.bigdata.drools.domain.request.BaseRequest;
 import com.tanghao.bigdata.drools.domain.request.MobilePaymentRequest;
 import com.tanghao.bigdata.drools.domain.response.RuleResponse;
 import com.tanghao.bigdata.drools.util.DateUtil;
@@ -22,8 +21,9 @@ import java.util.Date;
 @RestController
 public class TestPayRule {
 
-    @RequestMapping(value = "/pay", method = RequestMethod.POST)
+    @RequestMapping(value = "/pay", method = RequestMethod.GET)
     public RuleResponse testPayRule(){
+
         KieContainer kc = KieServices.Factory.get().getKieClasspathContainer();
         KieSession ksession = kc.newKieSession("pay_rule");
         MobilePaymentRequest payRequest = new MobilePaymentRequest();
