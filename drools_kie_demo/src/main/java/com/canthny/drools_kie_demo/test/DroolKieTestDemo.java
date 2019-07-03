@@ -37,14 +37,12 @@ public class DroolKieTestDemo {
         assets.setFund(30L);
         assets.setStock(50L);
         userInfo.setAssets(assets);
-
         KieCommands kieCommands = KieServices.Factory.get().getCommands();
         List<Command<?>> commands = new LinkedList<>();
         commands.add(kieCommands.newInsert(userInfo, "userInfo"));
         commands.add(kieCommands.newFireAllRules());
         ServiceResponse<ExecutionResults> results = ruleServicesClient.executeCommandsWithResults("drools-kie-demo_1.0.0",
                 kieCommands.newBatchExecution(commands, "session1"));
-
         UserInfo value = (UserInfo) results.getResult().getValue("userInfo");
         System.out.println(JSONObject.toJSON(value).toString());
     }
