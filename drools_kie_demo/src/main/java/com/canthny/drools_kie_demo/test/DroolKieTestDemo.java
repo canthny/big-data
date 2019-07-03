@@ -26,7 +26,6 @@ public class DroolKieTestDemo {
     public static void main(String[] args) {
         KieServicesConfiguration kieServicesConfiguration = KieServicesFactory.newRestConfiguration("http://192.168.8.132:8080/kie-server/services/rest/server","kieserver","kieserver1!");
         kieServicesConfiguration.setMarshallingFormat(MarshallingFormat.JSON);
-        // 创建规则服务客户端
         KieServicesClient kieServicesClient = KieServicesFactory.newKieServicesClient(kieServicesConfiguration);
         RuleServicesClient ruleServicesClient = kieServicesClient.getServicesClient(RuleServicesClient.class);
         UserInfo userInfo = new UserInfo();
@@ -39,7 +38,6 @@ public class DroolKieTestDemo {
         assets.setStock(50L);
         userInfo.setAssets(assets);
 
-        // 命令定义，包含插入数据，执行规则
         KieCommands kieCommands = KieServices.Factory.get().getCommands();
         List<Command<?>> commands = new LinkedList<>();
         commands.add(kieCommands.newInsert(userInfo, "userInfo"));
@@ -47,7 +45,6 @@ public class DroolKieTestDemo {
         ServiceResponse<ExecutionResults> results = ruleServicesClient.executeCommandsWithResults("drools-kie-demo_1.0.0",
                 kieCommands.newBatchExecution(commands, "session1"));
 
-        // 返回值读取
         UserInfo value = (UserInfo) results.getResult().getValue("userInfo");
         System.out.println(JSONObject.toJSON(value).toString());
     }
