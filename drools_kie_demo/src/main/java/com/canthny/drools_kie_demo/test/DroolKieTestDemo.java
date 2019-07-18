@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Description： kie-server动态部署demo测试
- * Created By tanghao on 2019/7/2
+ * Created By tanghao on 2019/7/22
  */
 public class DroolKieTestDemo {
 
