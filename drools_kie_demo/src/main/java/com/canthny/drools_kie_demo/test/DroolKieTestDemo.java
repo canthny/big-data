@@ -41,7 +41,7 @@ public class DroolKieTestDemo {
         List<Command<?>> commands = new LinkedList<>();
         commands.add(kieCommands.newInsert(userInfo, "userInfo"));
         commands.add(kieCommands.newFireAllRules());
-        //kie-server中发布的规则,以及设置的kiebase的id
+        //kie-server中发布的规则，通过/kie-server/services/rest/server/containers获取容器id,以及在kie-web端设置的kiebase的id
         ServiceResponse<ExecutionResults> results = ruleServicesClient.executeCommandsWithResults("drools-kie-demo_1.0.0",
                 kieCommands.newBatchExecution(commands, "session1"));
         UserInfo value = (UserInfo) results.getResult().getValue("userInfo");
