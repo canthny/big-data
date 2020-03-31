@@ -5,6 +5,7 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,10 +19,22 @@ public class InnerSource {
         StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
 
         fromFile(streamExecutionEnvironment);
+        fromCollection(streamExecutionEnvironment);
     }
 
     private static void fromFile(StreamExecutionEnvironment streamExecutionEnvironment){
         DataStreamSource<String> streamSource = streamExecutionEnvironment.readTextFile("D://test.txt","UTF-8");
+        streamSource.print();
+        try {
+            streamExecutionEnvironment.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void fromCollection(StreamExecutionEnvironment streamExecutionEnvironment){
+        String[] strArray={"deposit,10","withdraw,10","deposit,3","withdraw,10"};
+        DataStreamSource<String> streamSource = streamExecutionEnvironment.fromCollection(Arrays.asList(strArray));
         streamSource.print();
         try {
             streamExecutionEnvironment.execute();
