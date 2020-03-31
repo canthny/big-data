@@ -18,8 +18,10 @@ public class InnerSource {
     public static void main(String[] args) {
         StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
 
+        //从文件读流
         fromFile(streamExecutionEnvironment);
-        fromCollection(streamExecutionEnvironment);
+        //从本地集合中读流
+//        fromCollection(streamExecutionEnvironment);
     }
 
     private static void fromFile(StreamExecutionEnvironment streamExecutionEnvironment){
