@@ -14,24 +14,24 @@ public class TestAction {
 
     public static void main(String[] args) {
         try{
-            ObjectMapper mapper = new ObjectMapper();
-            ObjectNode initialKey = mapper.createObjectNode();
-            initialKey.put("index", 4);
-            byte[] serializedKey = mapper.writeValueAsBytes(initialKey);
-
-            ObjectNode initialValue = mapper.createObjectNode();
-            initialValue.put("word", "world");
-            byte[] serializedValue = mapper.writeValueAsBytes(initialValue);
-
-            JSONKeyValueDeserializationSchema schema = new JSONKeyValueDeserializationSchema(false);
-            ObjectNode deserializedValue = schema.deserialize(serializedKey, serializedValue, "", 0,
-                    0);
-            System.out.println(deserializedValue);
-
-            String testjson = "{\"accountId\":\"0716\",\"amount\":\"100\",\"eventTime\":\"2018/09/13 14:56:00\"}";
-            JsonNodeDeserializationSchema schema1 = new JsonNodeDeserializationSchema();
-            ObjectNode node = schema1.deserialize(testjson.getBytes());
-            System.out.println(node);
+//            ObjectMapper mapper = new ObjectMapper();
+//            ObjectNode initialKey = mapper.createObjectNode();
+//            initialKey.put("index", 4);
+//            byte[] serializedKey = mapper.writeValueAsBytes(initialKey);
+//
+//            ObjectNode initialValue = mapper.createObjectNode();
+//            initialValue.put("word", "world");
+//            byte[] serializedValue = mapper.writeValueAsBytes(initialValue);
+//
+//            JSONKeyValueDeserializationSchema schema = new JSONKeyValueDeserializationSchema(false);
+//            ObjectNode deserializedValue = schema.deserialize(serializedKey, serializedValue, "", 0,
+//                    0);
+//            System.out.println(deserializedValue);
+//
+//            String testjson = "{\"accountId\":\"0716\",\"amount\":\"100\",\"eventTime\":\"2018/09/13 14:56:00\"}";
+//            JsonNodeDeserializationSchema schema1 = new JsonNodeDeserializationSchema();
+//            ObjectNode node = schema1.deserialize(testjson.getBytes());
+//            System.out.println(node);
         }catch (Exception e){
             System.out.println(e);
         }
