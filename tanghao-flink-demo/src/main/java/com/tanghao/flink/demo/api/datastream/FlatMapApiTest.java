@@ -20,7 +20,7 @@ public class FlatMapApiTest {
         DataStreamSource<String> streamSource = streamExecutionEnvironment.fromCollection(Arrays.asList(strArray));
         SingleOutputStreamOperator stream = streamSource.flatMap(new FlatMapFunction<String, String>() {
 
-            /** flatMap相对于Map更灵活，不仅仅一对一，也可以过滤也可以一对多 */
+            /** flatMap相对于Map和filter更灵活，不仅仅一对一，也可以过滤也可以一对多 */
             public void flatMap(String s, Collector<String> collector) throws Exception {
                 String[] array = s.split(",");
                 for (int i=0;i<array.length;i++){
