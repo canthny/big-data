@@ -27,7 +27,19 @@ public class FilterApiTest {
             }
         });
 
-        streamAfterFilter.print();
+        streamAfterFilter.print("双数流");
+
+        SingleOutputStreamOperator streamAfterFilter2 = streamSource.filter(new FilterFunction<String>() {
+            public boolean filter(String s) throws Exception {
+                if(Integer.parseInt(s) % 2==0){
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+        });
+        streamAfterFilter2.print("单数流");
+
 
         try {
             streamExecutionEnvironment.execute();

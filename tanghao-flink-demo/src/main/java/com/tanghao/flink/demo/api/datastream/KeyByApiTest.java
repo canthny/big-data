@@ -32,17 +32,18 @@ public class KeyByApiTest {
             }
         });
 
-//        /** 根据类型统计每种类型的交易金额总和 */
-//        SingleOutputStreamOperator<Message> reduceResult = keyedStream.reduce(new ReduceFunction<Message>() {
-//            public Message reduce(Message message, Message message2) throws Exception {
-//                Long sum = message.getAmount() + message2.getAmount();
-//                String id = message.getId() + "_" +message2.getId();
-//                return new Message(id,message.getType(),sum);
-//            }
-//        });
-//
-//        reduceResult.print();
+        /** 根据类型统计每种类型的交易金额总和 */
+        SingleOutputStreamOperator<Message> reduceResult = keyedStream.reduce(new ReduceFunction<Message>() {
+            public Message reduce(Message message, Message message2) throws Exception {
+                Long sum = message.getAmount() + message2.getAmount();
+                String id = message.getId() + "_" +message2.getId();
+                return new Message(id,message.getType(),sum);
+            }
+        });
 
+        reduceResult.print();
+
+        /** 聚合函数，滚动输出当前key下最新的一条聚合操作后的记录 */
 //        keyedStream.sum("amount").print();
         keyedStream.max("amount").print();
 //        keyedStream.maxBy("amount").print();
