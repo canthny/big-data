@@ -1,15 +1,21 @@
 package com.tanghao.flink.demo.common;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.UUID;
+
 /**
  * Description： 消息POJO类
  * Created By tanghao on 2020/4/1
  */
-public class Message{
+public class Message implements Serializable {
     private String id;
 
     private String type;
 
     private Long amount;
+
+    private Date tradeTime;
 
     /** 符合POJO类的规则：
      * The class is public and standalone (no non-static inner class)
@@ -21,10 +27,26 @@ public class Message{
 
     }
 
+    public Message(String type, Long amount) {
+        this.id = generatorId();
+        this.type = type;
+        this.amount = amount;
+        this.tradeTime = new Date();
+    }
+
+
     public Message(String id, String type, Long amount) {
         this.id = id;
         this.type = type;
         this.amount = amount;
+        this.tradeTime = new Date();
+    }
+
+    public Message(String id, String type, Long amount, Date tradeTime) {
+        this.id = id;
+        this.type = type;
+        this.amount = amount;
+        this.tradeTime = tradeTime;
     }
 
     public String getId() {
@@ -51,12 +73,25 @@ public class Message{
         this.amount = amount;
     }
 
+    public Date getTradeTime() {
+        return tradeTime;
+    }
+
+    public void setTradeTime(Date tradeTime) {
+        this.tradeTime = tradeTime;
+    }
+
+    private String generatorId(){
+        return UUID.randomUUID().toString();
+    }
+
     @Override
     public String toString() {
         return "Message{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", type='" + type + '\'' +
                 ", amount=" + amount +
+                ", tradeTime=" + tradeTime +
                 '}';
     }
 }

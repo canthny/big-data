@@ -36,7 +36,7 @@ public class GetPayInfoJob {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         Properties properties = new Properties();
-        properties.setProperty("bootstrap.servers", "192.168.0.102:9092");
+        properties.setProperty("bootstrap.servers", "192.168.8.145:9082");
 
 
 //        DataStream<String> stream = env.addSource(new FlinkKafkaConsumer011<String>("20180913", new SimpleStringSchema(), properties));
