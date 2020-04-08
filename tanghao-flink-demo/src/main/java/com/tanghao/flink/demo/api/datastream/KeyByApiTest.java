@@ -20,15 +20,15 @@ public class KeyByApiTest {
     public static void main(String[] args) {
         StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
         List<Message> list = new ArrayList<Message>();
-        list.add(new Message("1","deposit",30L));
-        list.add(new Message("2","withdraw",21L));
-        list.add(new Message("3","withdraw",65L));
-        list.add(new Message("4","deposit",1L));
-        list.add(new Message("5","withdraw",21L));
+        list.add(new Message("1","1001",30L));
+        list.add(new Message("2","2001",21L));
+        list.add(new Message("3","2001",65L));
+        list.add(new Message("4","1001",1L));
+        list.add(new Message("5","2001",21L));
         DataStreamSource<Message> streamSource = streamExecutionEnvironment.fromCollection(list);
         KeyedStream<Message, String> keyedStream= streamSource.keyBy(new KeySelector<Message, String>() {
             public String getKey(Message message) throws Exception {
-                return message.getType();
+                return message.getTransCode();
             }
         });
 
@@ -37,7 +37,7 @@ public class KeyByApiTest {
             public Message reduce(Message message, Message message2) throws Exception {
                 Long sum = message.getAmount() + message2.getAmount();
                 String id = message.getId() + "_" +message2.getId();
-                return new Message(id,message.getType(),sum);
+                return new Message(id,message.getTransCode(),sum);
             }
         });
 

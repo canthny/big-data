@@ -2,6 +2,7 @@ package com.tanghao.flink.demo.common;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -11,11 +12,13 @@ import java.util.UUID;
 public class Message implements Serializable {
     private String id;
 
-    private String type;
+    private String transCode;//1001-充值，2001-提现，3001-消费
 
     private Long amount;
 
     private Date tradeTime;
+
+    private Long userId;
 
     /** 符合POJO类的规则：
      * The class is public and standalone (no non-static inner class)
@@ -27,26 +30,29 @@ public class Message implements Serializable {
 
     }
 
-    public Message(String type, Long amount) {
+    public Message(String transCode, Long amount) {
         this.id = generatorId();
-        this.type = type;
+        this.transCode = transCode;
         this.amount = amount;
         this.tradeTime = new Date();
+        this.userId = generatorUserId();
     }
 
 
-    public Message(String id, String type, Long amount) {
+    public Message(String id, String transCode, Long amount) {
         this.id = id;
-        this.type = type;
+        this.transCode = transCode;
         this.amount = amount;
         this.tradeTime = new Date();
+        this.userId = generatorUserId();
     }
 
-    public Message(String id, String type, Long amount, Date tradeTime) {
+    public Message(String id, String transCode, Long amount, Date tradeTime) {
         this.id = id;
-        this.type = type;
+        this.transCode = transCode;
         this.amount = amount;
         this.tradeTime = tradeTime;
+        this.userId = generatorUserId();
     }
 
     public String getId() {
@@ -57,12 +63,12 @@ public class Message implements Serializable {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getTransCode() {
+        return transCode;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTransCode(String transCode) {
+        this.transCode = transCode;
     }
 
     public Long getAmount() {
@@ -85,13 +91,27 @@ public class Message implements Serializable {
         return UUID.randomUUID().toString();
     }
 
+    private long generatorUserId(){
+        Random random = new Random();
+        return random.nextInt(1000);
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
                 "id='" + id + '\'' +
-                ", type='" + type + '\'' +
+                ", transCode='" + transCode + '\'' +
                 ", amount=" + amount +
                 ", tradeTime=" + tradeTime +
+                ", userId=" + userId +
                 '}';
     }
 }
