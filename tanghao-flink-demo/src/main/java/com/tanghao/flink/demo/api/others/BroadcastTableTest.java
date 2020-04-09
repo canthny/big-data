@@ -1,4 +1,4 @@
-package com.tanghao.flink.demo.test;
+package com.tanghao.flink.demo.api.others;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tanghao.flink.demo.common.ConstantKafka;
@@ -21,9 +21,10 @@ import java.util.Properties;
 
 /**
  * Description： 广播维表动态更新测试，对应的数据源为BroadcastMsgProducerTest产生的数据
+ * 场景：上游的消息中仅包含id和code之类的数据要转化成对应的类目名称，从字典表或者动态广播流中获取映射关系，并且支持类目名称可更新或者开关控制
  * Created By tanghao on 2020/4/8
  */
-public class BroadcastTest {
+public class BroadcastTableTest {
 
     public static void main(String[] args) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
