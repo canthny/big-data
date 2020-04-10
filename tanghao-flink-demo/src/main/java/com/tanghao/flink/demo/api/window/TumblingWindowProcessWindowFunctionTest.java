@@ -26,7 +26,7 @@ import java.util.*;
  * 场景：根据transCode统计每分钟充值、提现、消费等各类型交易总金额；并且根据userId统计用户分钟消费金额。
  * Created By tanghao on 2020/4/7
  */
-public class TumblingWindowTest {
+public class TumblingWindowProcessWindowFunctionTest {
 
     public static void main(String[] args) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
