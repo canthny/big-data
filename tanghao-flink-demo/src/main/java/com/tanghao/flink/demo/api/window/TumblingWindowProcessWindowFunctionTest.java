@@ -86,6 +86,7 @@ public class TumblingWindowProcessWindowFunctionTest {
             }
         });
         res.print();
+        System.out.println("执行计划:"+env.getExecutionPlan());
         res.getSideOutput(userConsumerAmountPerMin).print();
         /**
          * 输出结果：各类型分钟交易总额，用户分钟消费总额
