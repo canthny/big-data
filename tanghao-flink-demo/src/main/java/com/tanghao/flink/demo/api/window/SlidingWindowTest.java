@@ -92,7 +92,7 @@ public class SlidingWindowTest {
 
     private static class UserConsumerAmountPerMinuteComparator implements Comparator<UserConsumerAmountPerMinute>{
         public int compare(UserConsumerAmountPerMinute o1, UserConsumerAmountPerMinute o2) {
-            return o1.getUserId().compareTo(o2.getUserId());
+            return o1.getAmount().compareTo(o2.getAmount());
         }
     }
 }
