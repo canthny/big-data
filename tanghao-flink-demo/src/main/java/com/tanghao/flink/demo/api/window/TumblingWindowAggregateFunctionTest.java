@@ -71,6 +71,9 @@ public class TumblingWindowAggregateFunctionTest {
         }
     }
 
+    /**
+     * 这里禁止使用RichFunction,暂时不清楚为何这样设计，说是这样使用状态不正确
+     */
     private static class MySumAggregate extends RichAggregateFunction<Message,TradeCountMinuteResult,TradeCountMinuteResult> {
 
         private transient MapState<Long,Long> firstMinUserConsumerAmountMap;
