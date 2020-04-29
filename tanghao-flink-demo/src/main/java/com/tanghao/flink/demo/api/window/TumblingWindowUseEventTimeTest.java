@@ -17,7 +17,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import java.util.Properties;
 
 /**
- * Description： TODO
+ * Description： 使用事件时间
  * Created By tanghao on 2020/4/9
  */
 public class TumblingWindowUseEventTimeTest {
